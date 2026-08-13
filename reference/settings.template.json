@@ -1,5 +1,5 @@
 {
-  "_comment": "Template for ~/.claude/settings.json. Replace every REPLACE_ME value. Do NOT commit real credentials. The jepp-jira and jepp-confluence skills read the six JIRA_/CONFLUENCE_ vars below and will fail without them. Remove any key that does not apply to your setup.",
+  "_comment": "Template for ~/.claude/settings.json. Replace every REPLACE_ME value. Do NOT commit real credentials. The jira and confluence skills read the six JIRA_/CONFLUENCE_ vars below and will fail without them. Remove any key that does not apply to your setup.",
 
   "env": {
     "CLAUDE_CODE_USE_BEDROCK": "REPLACE_ME_or_remove_this_key",

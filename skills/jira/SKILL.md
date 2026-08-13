@@ -1,5 +1,5 @@
 ---
-name: jepp-jira
+name: jira
 description: Use this skill for ANY Jira interaction — creating tickets, transitioning issues, checking status, assigning sprints, adding comments, listing issues, querying boards, or updating fields. This skill contains critical workarounds for API auth, JSON parsing, sprint assignment, and board-to-status mappings that prevent common failures. Always load when the user mentions ticket IDs (e.g. "CND-20081"), says "transition to done", "create a ticket", "what's the status of", "move to In Review", "current sprint", "assign to sprint", or any JIRA-related task. Do NOT use for Bitbucket PRs, git operations, or CI/CD — those have separate skills.
 user-invocable: false
 ---

@@ -1,5 +1,5 @@
 ---
-name: jepp-confluence
+name: confluence
 description: Use this skill for ANY Confluence interaction — reading pages, searching for content, browsing spaces, viewing page history, or fetching attachments. This skill contains the correct base URL, auth pattern, and JSON parsing workarounds needed for reliable Confluence REST API access. Always load when the user mentions Confluence URLs (containing "/confluence/"), space keys, page titles, or asks about documentation stored in Confluence. Do NOT use for Jama, Jira, Bitbucket, or git operations — those have separate skills.
 user-invocable: false
 ---

@@ -29,7 +29,7 @@ copy_if_absent() {
 }
 
 echo "1. Skills -> $CLAUDE_DIR/skills/"
-for s in jepp-jira jepp-confluence session-start; do
+for s in jira confluence session-start; do
   copy_if_absent "$PKG/skills/$s/SKILL.md" "$CLAUDE_DIR/skills/$s/SKILL.md"
 done
 echo
@@ -103,8 +103,8 @@ cat <<'EOF'
 Done. Remaining manual steps:
 
   1. Edit ~/.claude/settings.json and replace every REPLACE_ME value.
-     The six JIRA_/CONFLUENCE_ vars are required by the jepp-jira and
-     jepp-confluence skills; no credentials ship in this package.
+     The six JIRA_/CONFLUENCE_ vars are required by the jira and
+     confluence skills; no credentials ship in this package.
 
   2. Rename the project folders to your real project prefixes, then update the
      directory tree in <git-root>/CLAUDE.md to match.
@@ -115,6 +115,6 @@ Done. Remaining manual steps:
 
   4. Clone repos into the project folders.
 
-  5. Verify: run /skills and confirm jepp-jira, jepp-confluence and
+  5. Verify: run /skills and confirm jira, confluence and
      session-start are listed, then run /session-start.
 EOF

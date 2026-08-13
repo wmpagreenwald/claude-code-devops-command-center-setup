@@ -14,8 +14,8 @@ claude-setup/
 ├── README.md
 ├── setup.sh                          # installer; idempotent, never overwrites
 ├── skills/
-│   ├── jepp-jira/SKILL.md            # Jira REST API + auth and JSON-parsing workarounds
-│   ├── jepp-confluence/SKILL.md      # Confluence REST API, same pattern
+│   ├── jira/SKILL.md                 # Jira REST API + auth and JSON-parsing workarounds
+│   ├── confluence/SKILL.md           # Confluence REST API, same pattern
 │   └── session-start/SKILL.md        # daily startup sequence
 ├── git-structure/                    # installs to ~/git (override with GIT_ROOT)
 │   ├── CLAUDE.md                     # ROOT instruction file
@@ -77,7 +77,7 @@ is worse than not having one, so fill them in or delete them.
 
 ## Caveats
 
-- The two Confluence URLs inside `jepp-confluence/SKILL.md` use
+- The two Confluence URLs inside `confluence/SKILL.md` use
   `confluence.example.com` with placeholder space keys. They are input-format
   examples for the skill's URL-parsing rules, and both URL shapes
   (`/display/{space}/{title}` and `/spaces/{space}/pages/{id}/{title}`) must stay
