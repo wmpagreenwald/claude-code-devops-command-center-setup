@@ -13,6 +13,7 @@ tied to a specific project, org, or person.
 claude-setup/
 ├── README.md
 ├── setup.sh                          # installer; idempotent, never overwrites
+├── setup-codex.sh                    # Codex installer; idempotent, never overwrites
 ├── skills/
 │   ├── jira/SKILL.md                 # Jira REST API + auth and JSON-parsing workarounds
 │   ├── confluence/SKILL.md           # Confluence REST API, same pattern
@@ -43,6 +44,19 @@ PROJECTS="alpha beta gamma" GIT_ROOT=~/work ./setup.sh
 ```
 
 `setup.sh` skips anything that already exists, so it is safe to re-run.
+
+## Codex install
+
+```bash
+./setup-codex.sh
+
+# or name your projects and locations up front:
+PROJECTS="alpha beta gamma" GIT_ROOT=~/work ./setup-codex.sh
+```
+
+The Codex installer puts global instructions in `~/.codex/AGENTS.md`, user
+skills in `~/.agents/skills/`, and project instructions in each project's
+`AGENTS.md`. It does not copy the Claude-specific settings template.
 
 ## The three instruction-file levels
 
