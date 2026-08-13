@@ -1,0 +1,24 @@
+Done - MM/DD/YYYY
+
+- Short header stating what was completed
+
+  Body paragraph with enough context to understand what was done and why without
+  looking anything up: commit hashes, run IDs, PR numbers, ticket IDs, and the key
+  decisions made. Call out what was verified versus what was assumed, and state
+  explicitly what was NOT done and why.
+
+- Second item, appended BELOW the first
+
+  Entries are strictly chronological, earliest first. A new entry is always
+  appended at the bottom of the file, never inserted in the middle. After adding
+  one, check that it actually landed at the bottom.
+
+
+Rules (from the root CLAUDE.md):
+- One file per day: done_MMDDYYYY.txt, created at the start of each session.
+- Lives in the current week's folder (week-of-MMDDYYYY).
+- Plain text. Header line, then bullets starting with "- ".
+- Each item: succinct header, empty line, then the context.
+- Substantive work only. Do NOT log session workflow items such as updating
+  CLAUDE.md, maintaining the todo files, or other housekeeping.
+- No emojis.

@@ -1,0 +1,9 @@
+<PROJECT>
+
+(no open items)
+
+# Only add items that need to be revisited later: unknowns, deferred decisions,
+# external dependencies. Do not add work that is in progress or already planned.
+# Prefix items blocked on an external dependency with BLOCKED:
+# Prefix items needing a discussion before any work can start with DISCUSS:
+# Completed items are REMOVED from this file and logged in the done file.

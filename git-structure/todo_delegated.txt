@@ -1,0 +1,8 @@
+Delegated - items assigned to another person
+
+(none open)
+
+# For items explicitly assigned to someone else. These should not appear in
+# todo.txt. Include the assignee, what they need to do, and any handoff notes
+# or supporting files. Close them when the assignee confirms completion; if
+# that unblocks something in todo.txt, update that item.

@@ -1,0 +1,8 @@
+Deferred - items with no near-term unblock path
+
+(none)
+
+# Move items here from todo.txt when they have no near-term unblock path
+# (e.g. blocked on infrastructure that does not exist yet, or an external
+# migration with no timeline). Same format as todo.txt. Move back to todo.txt
+# when they become actionable.

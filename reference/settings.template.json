@@ -1,0 +1,24 @@
+{
+  "_comment": "Template for ~/.claude/settings.json. Replace every REPLACE_ME value. Do NOT commit real credentials. The jepp-jira and jepp-confluence skills read the six JIRA_/CONFLUENCE_ vars below and will fail without them. Remove any key that does not apply to your setup.",
+
+  "env": {
+    "CLAUDE_CODE_USE_BEDROCK": "REPLACE_ME_or_remove_this_key",
+    "AWS_REGION": "REPLACE_ME_or_remove_this_key",
+    "AWS_BEARER_TOKEN_BEDROCK": "REPLACE_ME_or_remove_this_key",
+
+    "JIRA_URL": "REPLACE_ME_jira_base_url",
+    "JIRA_USERNAME": "REPLACE_ME",
+    "JIRA_PASSWORD": "REPLACE_ME",
+
+    "CONFLUENCE_URL": "REPLACE_ME_confluence_base_url",
+    "CONFLUENCE_USERNAME": "REPLACE_ME",
+    "CONFLUENCE_PASSWORD": "REPLACE_ME"
+  },
+
+  "model": "REPLACE_ME_or_remove_this_key",
+  "effortLevel": "REPLACE_ME_or_remove_this_key",
+
+  "enabledPlugins": {
+    "slack@claude-plugins-official": true
+  }
+}
