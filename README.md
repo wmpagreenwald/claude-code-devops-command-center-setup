@@ -1,107 +1,267 @@
-# Claude Code environment package
+# Claude Code and Codex environment setup
 
-Transports a Claude Code working setup to another machine: the git folder
-structure, the root-level instruction file, project- and repo-level instruction
-file templates, and three custom skills.
+This repository contains scripts and templates for setting up a shared working
+directory, task-tracking files, instruction files, and three skills:
 
-Project names are generic placeholders throughout. Nothing in this package is
-tied to a specific project, org, or person.
+- `jira` — Jira Server REST API workflows
+- `confluence` — Confluence REST API workflows
+- `session-start` — session startup and briefing workflow
 
-## Contents
+The scripts configure files on the local machine. They do not install Claude
+Code, Codex, Git, external plugins, or repositories, and they do not contain
+credentials.
+
+## Choose your client
+
+Use `setup.sh` for Claude Code or `setup-codex.sh` for Codex. The scripts use
+the same source templates but install client-specific instruction filenames and
+skill locations.
+
+| Client | Global instructions | User skills | Project/repository instructions |
+|---|---|---|---|
+| Claude Code | `~/.claude/` settings and the configured Git root | `~/.claude/skills/` | `CLAUDE.md` |
+| Codex | `~/.codex/AGENTS.md` | `~/.agents/skills/` | `AGENTS.md` |
+
+Codex reads global and project instructions according to its instruction-file
+discovery rules. In particular, an `AGENTS.md` at the root of the repository
+you are working in is the reliable location for repository-specific guidance.
+See the [official Codex AGENTS.md documentation](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
+
+## Prerequisites
+
+Before using the installed setup:
+
+1. Install and authenticate the client you intend to use: Claude Code or Codex.
+2. Install Git if you need to clone repositories.
+3. Use a shell with Bash. Both scripts are Bash scripts.
+4. Obtain the Jira and Confluence base URLs and credentials if you need those
+   skills. Do not put credentials in this repository.
+
+## Get the setup files
+
+Clone this repository:
+
+```bash
+git clone https://github.com/wmpagreenwald/claude-code-devops-command-center-setup.git
+cd claude-code-devops-command-center-setup
+```
+
+Run the commands below from this repository directory. If you downloaded an
+archive instead, change to the directory containing the selected setup script.
+
+## Claude Code setup
+
+Run:
+
+```bash
+bash setup.sh
+```
+
+The default installation creates or preserves:
+
+- `~/.claude/skills/jira/SKILL.md`
+- `~/.claude/skills/confluence/SKILL.md`
+- `~/.claude/skills/session-start/SKILL.md`
+- `~/git/CLAUDE.md`
+- `~/git/todo.txt`, `todo_deferred.txt`, and `todo_delegated.txt`
+- `~/git/project-a/CLAUDE.md` and `~/git/project-b/CLAUDE.md`
+- the current `~/git/week-of-MMDDYYYY/` folder
+- `~/.claude/settings.json`, copied from the placeholder template only when
+  that file does not already exist
+
+The script skips existing destination files and does not merge them. If
+`~/.claude/settings.json` already exists, merge the needed values from
+`reference/settings.template.json` manually.
+
+### Claude Code follow-up steps
+
+1. Edit `~/.claude/settings.json`. Remove settings you do not use and replace
+   the placeholders. The Jira and Confluence skills require:
+
+   ```text
+   JIRA_URL
+   JIRA_USERNAME
+   JIRA_PASSWORD
+   CONFLUENCE_URL
+   CONFLUENCE_USERNAME
+   CONFLUENCE_PASSWORD
+   ```
+
+2. Rename `~/git/project-a` and `~/git/project-b`, or provide real names during
+   installation:
+
+   ```bash
+   PROJECTS="alpha beta" GIT_ROOT="$HOME/work" bash setup.sh
+   ```
+
+   Update the directory tree in the installed root instruction file
+   (`$GIT_ROOT/CLAUDE.md`, default `~/git/CLAUDE.md`) after changing the names.
+   The script creates the requested folders but does not rewrite that tree.
+
+3. Clone your actual repositories into their project folders. This package does
+   not clone repositories for you.
+
+4. For each repository, create a repository-level instruction file from
+   `reference/example-repo-CLAUDE.md`:
+
+   ```bash
+   cp reference/example-repo-CLAUDE.md "$HOME/git/alpha/example-repo/CLAUDE.md"
+   ```
+
+   Replace the example path and fill in the template, or remove it if the
+   repository does not need repository-specific instructions.
+
+5. If you use Slack, install the Claude plugin separately from Claude Code:
+
+   ```text
+   /plugin marketplace add anthropics/claude-plugins-official
+   /plugin install slack
+   ```
+
+6. Start Claude Code in a repository, run `/skills`, and confirm `jira`,
+   `confluence`, and `session-start` are listed. Then run `/session-start`.
+
+## Codex setup
+
+Run:
+
+```bash
+bash setup-codex.sh
+```
+
+The default installation creates or preserves:
+
+- `~/.codex/AGENTS.md`
+- `~/.agents/skills/jira/SKILL.md`
+- `~/.agents/skills/confluence/SKILL.md`
+- `~/.agents/skills/session-start/SKILL.md`
+- `~/git/AGENTS.md`
+- `~/git/todo.txt`, `todo_deferred.txt`, and `todo_delegated.txt`
+- `~/git/project-a/AGENTS.md` and `~/git/project-b/AGENTS.md`
+- the current `~/git/week-of-MMDDYYYY/` folder
+
+The script converts the Claude-oriented source templates to Codex-oriented
+`AGENTS.md` files when it installs them. It does not copy
+`reference/settings.template.json`, install plugins, or configure credentials.
+Codex detects skill changes automatically; if a change does not appear, start a
+new Codex session. See the [official Codex skills documentation](https://learn.chatgpt.com/docs/build-skills).
+
+### Codex location overrides
+
+The defaults are:
+
+```text
+CODEX_HOME=~/.codex
+CODEX_SKILLS_ROOT=~/.agents/skills
+GIT_ROOT=~/git
+PROJECTS="project-a project-b"
+```
+
+Override them when running the script:
+
+```bash
+CODEX_HOME="$HOME/.codex" \
+CODEX_SKILLS_ROOT="$HOME/.agents/skills" \
+GIT_ROOT="$HOME/work" \
+PROJECTS="alpha beta" \
+bash setup-codex.sh
+```
+
+`PROJECTS` is a space-separated list of folder names. The Codex installer
+rejects names containing `/` and the exact names `.` and `..`. Keep
+`CODEX_SKILLS_ROOT` at its default unless your Codex configuration is set to
+load a different skills directory.
+
+### Codex credentials for Jira and Confluence
+
+Before using those skills, make these variables available in the environment
+used to run Codex's shell commands:
+
+```bash
+export JIRA_URL="https://your-jira-host"
+export JIRA_USERNAME="your-username"
+export JIRA_PASSWORD="your-password"
+export CONFLUENCE_URL="https://your-confluence-host"
+export CONFLUENCE_USERNAME="your-username"
+export CONFLUENCE_PASSWORD="your-password"
+```
+
+Use your organization's approved secret-management method for storing the
+values. Do not commit them to this repository or place real values in a tracked
+file.
+
+### Codex follow-up steps
+
+1. Rename the generated project folders and update the installed root instruction
+   file (`$GIT_ROOT/AGENTS.md`, default `~/git/AGENTS.md`) so its directory tree
+   matches the folders you use. The installer creates folders; it does not
+   rewrite the template's example names.
+2. Clone your repositories into those project folders.
+3. For each repository, create an `AGENTS.md` at that repository's own root.
+   The repository template is Claude-named, so convert its filename references
+   while copying it:
+
+   ```bash
+   sed 's/CLAUDE\.md/AGENTS.md/g' \
+     reference/example-repo-CLAUDE.md \
+     > "$HOME/work/alpha/example-repo/AGENTS.md"
+   ```
+
+   Replace the example path and fill in the template, or remove it if the
+   repository does not need repository-specific instructions.
+4. Start a new Codex CLI or IDE session in one of the repositories and run
+   `/skills`. Confirm `jira`, `confluence`, and `session-start` are listed, then
+   run `/session-start`.
+5. If you need Slack, use Codex CLI's `/plugins` browser to inspect and install
+   the plugin if it is available to your account. Plugin installation is
+   separate from this script.
+
+## Templates and directory structure
+
+The repository contains the following source files:
 
 ```
-claude-setup/
+claude-code-devops-command-center-setup/
 ├── README.md
-├── setup.sh                          # installer; idempotent, never overwrites
-├── setup-codex.sh                    # Codex installer; idempotent, never overwrites
+├── setup.sh
+├── setup-codex.sh
 ├── skills/
-│   ├── jira/SKILL.md                 # Jira REST API + auth and JSON-parsing workarounds
-│   ├── confluence/SKILL.md           # Confluence REST API, same pattern
-│   └── session-start/SKILL.md        # daily startup sequence
-├── git-structure/                    # installs to ~/git (override with GIT_ROOT)
-│   ├── CLAUDE.md                     # ROOT instruction file
-│   ├── todo.txt                      # empty, format rules as comments
+│   ├── jira/SKILL.md
+│   ├── confluence/SKILL.md
+│   └── session-start/SKILL.md
+├── git-structure/
+│   ├── CLAUDE.md
+│   ├── todo.txt
 │   ├── todo_deferred.txt
 │   ├── todo_delegated.txt
-│   ├── WEEKLY-FOLDERS.txt            # explains week-of-* folders; not copied
-│   └── project-a/  project-b/        # placeholder project folders
+│   ├── WEEKLY-FOLDERS.txt
+│   ├── project-a/.gitkeep
+│   └── project-b/.gitkeep
 └── reference/
-    ├── example-project-CLAUDE.md     # PROJECT-level template
-    ├── example-repo-CLAUDE.md        # REPO-level template
-    ├── settings.template.json        # env vars with placeholders, NO credentials
-    └── done-file-format.txt          # done-file conventions + skeleton
+    ├── example-project-CLAUDE.md
+    ├── example-repo-CLAUDE.md
+    ├── settings.template.json
+    └── done-file-format.txt
 ```
 
-## Install
+The project and repository instruction files are templates. Fill them in with
+verified project information or delete them. Do not leave placeholder content
+in active project or repository instruction files.
 
-```bash
-unzip claude-setup.zip
-cd claude-setup
-./setup.sh
+The package contains no real task history, done files, weekly-folder history,
+repositories, credentials, or external plugins. The installers create the
+current weekly folder and template task files as part of setup.
 
-# or name your projects up front:
-PROJECTS="alpha beta gamma" GIT_ROOT=~/work ./setup.sh
-```
+## Important caveats
 
-`setup.sh` skips anything that already exists, so it is safe to re-run.
-
-## Codex install
-
-```bash
-./setup-codex.sh
-
-# or name your projects and locations up front:
-PROJECTS="alpha beta gamma" GIT_ROOT=~/work ./setup-codex.sh
-```
-
-The Codex installer puts global instructions in `~/.codex/AGENTS.md`, user
-skills in `~/.agents/skills/`, and project instructions in each project's
-`AGENTS.md`. It does not copy the Claude-specific settings template.
-
-## The three instruction-file levels
-
-- **Root** (`git-structure/CLAUDE.md`) — how you work, independent of project:
-  folder layout, todo/done/weekly-folder conventions, writing style, git and
-  deployment-promotion discipline, verification rules. Installs to the git root.
-- **Project** (`reference/example-project-CLAUDE.md`) — what a project is and how
-  it operates: architecture, environments, repo inventory, SDLC, people. Also
-  where root-level defaults get overridden for that project. Lives at
-  `<git-root>/<project>/CLAUDE.md`.
-- **Repo** (`reference/example-repo-CLAUDE.md`) — detail that only matters with
-  the codebase open: layout, entry points, versions, build/deploy mechanics, and
-  cross-repo effects. Lives at the repo root.
-
-Both examples are structural templates with guidance on what belongs in each
-section, not filled-in files. A project CLAUDE.md left full of placeholder text
-is worse than not having one, so fill them in or delete them.
-
-## What is deliberately NOT included
-
-- **Credentials.** The skills reference `$JIRA_USERNAME`/`$JIRA_PASSWORD` and
-  `$CONFLUENCE_USERNAME`/`$CONFLUENCE_PASSWORD` and contain no literal secrets.
-  Real values live in `~/.claude/settings.json` on the source machine; move them
-  across out of band.
-- **The Slack plugin.** Marketplace-installed
-  (`slack@claude-plugins-official`), so it is reinstalled rather than copied. On
-  the source machine it is the only plugin and supplies every MCP tool in use —
-  no MCP servers are configured directly in settings.
-- **Real todo/done content and weekly folders.** Task files ship empty with their
-  format rules as comments; work history stays on the source machine.
-- **Repos.** Clone them into the project folders.
-
-## Caveats
-
-- The two Confluence URLs inside `confluence/SKILL.md` use
-  `confluence.example.com` with placeholder space keys. They are input-format
-  examples for the skill's URL-parsing rules, and both URL shapes
-  (`/display/{space}/{title}` and `/spaces/{space}/pages/{id}/{title}`) must stay
-  intact for that section to make sense. The real base URL comes from
-  `$CONFLUENCE_URL` at runtime.
-- `setup.sh` skips rather than merges. If `~/.claude/settings.json` already
-  exists, merge the env block by hand.
-- The root `CLAUDE.md` contains a directory tree naming the placeholder project
-  folders. Update it after renaming them, or it will describe a layout that does
-  not exist.
-- `session-start` derives conventions from the root `CLAUDE.md` at runtime, so it
-  follows whatever that file says. If you change the todo or done file naming,
-  the skill needs no edit.
+- The Confluence examples use `confluence.example.com` and placeholder space
+  keys. They document URL parsing only; the runtime base URL comes from
+  `$CONFLUENCE_URL`.
+- The Jira and Confluence skills use Basic Auth with the six environment
+  variables listed above. The repository does not validate those credentials.
+- The Claude installer uses `~/.claude/settings.json`; the Codex installer uses
+  `~/.codex/AGENTS.md` by default and does not use that settings template.
+- Both installers skip existing files rather than merging or overwriting them.
+- Codex's user skills are installed under `~/.agents/skills/`, while
+  repository-specific skills, when used, belong under `.agents/skills/` in the
+  repository hierarchy described by the official Codex documentation.
